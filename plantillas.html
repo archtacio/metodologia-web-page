@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Descarga plantillas de investigación gratuitas en formato PDF">
+    <meta name="keywords" content="plantillas, investigación, descargar, PDF, académicas">
+    <title>Plantillas Disponibles - Investigación</title>
+    <link rel="stylesheet" href="/css/estilos.css">
+    <link rel="icon" type="image/x-icon" href="/images/favicon.ico">
+</head>
+<body>
+    <!-- Header con navegación y toggle de modo oscuro -->
+    <header class="header">
+        <div class="header-content">
+            <img src="images/logo.png" alt="Logo Plantillas de Investigación" class="logo-header" onclick="window.location.href='/index.html'" style="cursor: pointer;">
+            <button class="theme-toggle" onclick="toggleTheme()" aria-label="Cambiar tema">
+                <span class="theme-icon">🌙</span>
+                <span class="theme-text">Modo Oscuro</span>
+            </button>
+        </div>
+    </header>
+
+    <!-- Animación de fondo -->
+    <div class="background-animation" id="backgroundAnimation"></div>
+
+    <!-- Contenido principal -->
+    <main class="contenedor">
+        <img src="/images/logo.png" alt="Logo Plantillas de Investigación" class="fade-in">
+        <h3 class="fade-in">Plantillas Disponibles</h3>
+        
+        <p class="fade-in" style="font-size: 1.1rem; color: var(--text-secondary); margin: 1rem 0 2rem; max-width: 500px;">
+            Selecciona y descarga las plantillas que necesites para tu investigación
+        </p>
+
+        <!-- Grid de plantillas -->
+        <div class="plantillas-grid fade-in">
+            <div class="plantilla-card">
+                <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.3rem;">Plantilla #1</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Plantilla básica para investigación académica con estructura estándar y formato profesional.
+                </p>
+                <button class="botonplantillas" onclick="descargarPDF('/plantillas/plantillas1.pdf')">
+                    📄 Descargar Plantilla #1
+                </button>
+            </div>
+
+            <div class="plantilla-card">
+                <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.3rem;">Plantilla #2</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Plantilla avanzada con secciones adicionales para investigaciones más detalladas.
+                </p>
+                <button class="botonplantillas" onclick="descargarPDF('/plantillas/plantillas2.pdf')">
+                    📄 Descargar Plantilla #2
+                </button>
+            </div>
+
+            <div class="plantilla-card">
+                <h4 style="color: var(--text-primary); margin-bottom: 1rem; font-size: 1.3rem;">Plantilla #3</h4>
+                <p style="color: var(--text-secondary); margin-bottom: 1.5rem; font-size: 0.95rem;">
+                    Plantilla especializada para tesis y proyectos de grado con formato institucional.
+                </p>
+                <button class="botonplantillas" onclick="descargarPDF('/plantillas/plantillas3.pdf')">
+                    📄 Descargar Plantilla #3
+                </button>
+            </div>
+        </div>
+
+        <!-- Botón para volver -->
+        <button class="botonp fade-in" onclick="window.location.href='/index.html'" style="margin-top: 2rem; background: linear-gradient(135deg, #6b46c1, #3182ce);">
+            ← Volver al Inicio
+        </button>
+    </main>
+
+    <script>
+        // Función para descargar PDF con mejor UX
+        function descargarPDF(ruta) {
+            // Mostrar indicador de descarga
+            const button = event.target;
+            const originalText = button.innerHTML;
+            button.innerHTML = '⏳ Descargando...';
+            button.disabled = true;
+            
+            // Crear enlace para descarga
+            const enlace = document.createElement('a');
+            enlace.href = ruta;
+            enlace.download = '';
+            enlace.style.display = 'none';
+            document.body.appendChild(enlace);
+            
+            // Simular delay y ejecutar descarga
+            setTimeout(() => {
+                enlace.click();
+                document.body.removeChild(enlace);
+                
+                // Restaurar botón
+                button.innerHTML = originalText;
+                button.disabled = false;
+                
+                // Mostrar confirmación
+                showDownloadConfirmation();
+            }, 500);
+        }
+
+        // Mostrar confirmación de descarga
+        function showDownloadConfirmation() {
+            const notification = document.createElement('div');
+            notification.innerHTML = '✅ Descarga iniciada exitosamente';
+            notification.style.cssText = `
+                position: fixed;
+                top: 100px;
+                right: 20px;
+                background: var(--accent-color);
+                color: white;
+                padding: 1rem 1.5rem;
+                border-radius: var(--border-radius);
+                box-shadow: var(--shadow-lg);
+                z-index: 10000;
+                animation: slideIn 0.3s ease-out;
+                font-weight: 500;
+            `;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.style.animation = 'slideOut 0.3s ease-in forwards';
+                setTimeout(() => {
+                    document.body.removeChild(notification);
+                }, 300);
+            }, 3000);
+        }
+
+        // Función para cambiar entre modo claro y oscuro
+        function toggleTheme() {
+            const html = document.documentElement;
+            const themeIcon = document.querySelector('.theme-icon');
+            const themeText = document.querySelector('.theme-text');
+            
+            if (html.getAttribute('data-theme') === 'dark') {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Modo Oscuro';
+                localStorage.setItem('theme', 'light');
+            } else {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Modo Claro';
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+
+        // Cargar tema guardado
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme');
+            const html = document.documentElement;
+            const themeIcon = document.querySelector('.theme-icon');
+            const themeText = document.querySelector('.theme-text');
+            
+            if (savedTheme === 'dark') {
+                html.setAttribute('data-theme', 'dark');
+                themeIcon.textContent = '☀️';
+                themeText.textContent = 'Modo Claro';
+            } else {
+                html.removeAttribute('data-theme');
+                themeIcon.textContent = '🌙';
+                themeText.textContent = 'Modo Oscuro';
+            }
+        }
+
+        // Crear animación de partículas de fondo
+        function createBackgroundAnimation() {
+            const container = document.getElementById('backgroundAnimation');
+            const particleCount = 15;
+            
+            for (let i = 0; i < particleCount; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                
+                particle.style.left = Math.random() * 100 + '%';
+                particle.style.top = Math.random() * 100 + '%';
+                particle.style.width = (Math.random() * 4 + 2) + 'px';
+                particle.style.height = particle.style.width;
+                particle.style.animationDelay = Math.random() * 6 + 's';
+                particle.style.animationDuration = (Math.random() * 3 + 4) + 's';
+                
+                container.appendChild(particle);
+            }
+        }
+
+        // Añadir animaciones CSS para notificaciones
+        const style = document.createElement('style');
+        style.textContent = `
+            @keyframes slideIn {
+                from { transform: translateX(100%); opacity: 0; }
+                to { transform: translateX(0); opacity: 1; }
+            }
+            @keyframes slideOut {
+                from { transform: translateX(0); opacity: 1; }
+                to { transform: translateX(100%); opacity: 0; }
+            }
+        `;
+        document.head.appendChild(style);
+
+        // Inicializar cuando se carga la página
+        document.addEventListener('DOMContentLoaded', function() {
+            loadTheme();
+            createBackgroundAnimation();
+            
+            // Añadir clase fade-in con delay para efecto escalonado
+            const elements = document.querySelectorAll('.fade-in');
+            elements.forEach((el, index) => {
+                el.style.animationDelay = (index * 0.2) + 's';
+            });
+        });
+
+        // Detectar preferencia de sistema para modo oscuro
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches) {
+            if (!localStorage.getItem('theme')) {
+                document.documentElement.setAttribute('data-theme', 'dark');
+                localStorage.setItem('theme', 'dark');
+            }
+        }
+    </script>
+</body>
+</html>
